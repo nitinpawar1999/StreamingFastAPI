@@ -3,6 +3,7 @@ from fastapi.responses import StreamingResponse
 import openai
 import os
 import sys
+import time
 
 # Getting OpenAI API Key
 #OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
@@ -70,3 +71,20 @@ def get_response_openai(prompt):
 )
 def chat(prompt: str = Query(..., max_length=100)):
     return StreamingResponse(get_response_openai(prompt), media_type="text/event-stream")
+
+
+
+def get_text_stream(text_file_path):
+    with open(text_file_path, "r") as file:
+        for line in file:
+            yield line
+            time.sleep(0.5)
+
+@app.get(
+    "/txtstream/",
+    tags=["APIs"],
+    response_model=str,
+    responses={503: {"detail": error503}},
+)
+def txtstream():
+    return StreamingResponse(get_text_stream('sample_file.txt'), media_type="text/event-stream")
