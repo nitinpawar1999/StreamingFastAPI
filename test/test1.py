@@ -7,5 +7,5 @@ response = requests.get(
 
 for chunk in response.iter_content(1024):
     if chunk:
-        print(str(chunk, encoding="utf-8"), end="\n")
+        print(str(chunk, encoding="utf-8"), end=" ", flush=True)
         

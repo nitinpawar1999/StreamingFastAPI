@@ -8,7 +8,7 @@ import asyncio
 
 # Getting OpenAI API Key
 #OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = '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'
 if not len(OPENAI_API_KEY):
     print("Please set OPENAI_API_KEY environment variable. Exiting.")
     sys.exit(1)
@@ -80,7 +80,7 @@ def get_text_stream(text_file_path):
         for line in file:
             for word in line.split():
                 yield word
-                time.sleep(0.3)
+                time.sleep(0.1)
 
 
 @app.get("/txtstream/")

@@ -9,5 +9,5 @@ response = requests.get(
 
 for chunk in response.iter_content(chunk_size=10):
     if chunk:
-        print(str(chunk, encoding="utf-8"), end="")
+        print(str(chunk, encoding="utf-8"), end="", flush=True)
         
