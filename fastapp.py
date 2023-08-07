@@ -4,6 +4,7 @@ import openai
 import os
 import sys
 import time
+import asyncio
 
 # Getting OpenAI API Key
 #OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
@@ -77,8 +78,8 @@ def chat(prompt: str = Query(..., max_length=100)):
 def get_text_stream(text_file_path):
     with open(text_file_path, "r") as file:
         for line in file:
-            yield line
-            time.sleep(0.5)
+            for word in line.split():
+                yield word+' '
 
 @app.get(
     "/txtstream/",

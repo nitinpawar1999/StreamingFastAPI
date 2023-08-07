@@ -1,6 +1,6 @@
 import requests
 import time
-url = "http://127.0.0.1:8000/chat/?prompt=Generate Lorem Ipsum text 5 lines."
+url = "http://127.0.0.1:8000/chat/?prompt=What is insurance?"
 response = requests.get(
     url,
     stream=True,
