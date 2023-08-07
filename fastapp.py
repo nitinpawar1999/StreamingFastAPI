@@ -79,13 +79,10 @@ def get_text_stream(text_file_path):
     with open(text_file_path, "r") as file:
         for line in file:
             for word in line.split():
-                yield word+' '
+                yield word
+                time.sleep(0.3)
 
-@app.get(
-    "/txtstream/",
-    tags=["APIs"],
-    response_model=str,
-    responses={503: {"detail": error503}},
-)
-def txtstream():
+
+@app.get("/txtstream/")
+async def txtstream():
     return StreamingResponse(get_text_stream('sample_file.txt'), media_type="text/event-stream")
