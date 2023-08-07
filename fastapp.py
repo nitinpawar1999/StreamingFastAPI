@@ -5,7 +5,8 @@ import os
 import sys
 
 # Getting OpenAI API Key
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+#OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_API_KEY = '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'
 if not len(OPENAI_API_KEY):
     print("Please set OPENAI_API_KEY environment variable. Exiting.")
     sys.exit(1)
@@ -22,7 +23,7 @@ max_tokens = 512
 app = FastAPI(
     title="Streaming API",
     description="""### API specifications\n
-To test out the Streaming API `campaign`, fire a sample query, then use the Curl command in your terminal to see it stream in real time\n
+To test out the Streaming API , fire a sample query, then use the Curl command in your terminal to see it stream in real time\n
 This doc does not support streaming outputs, but curl does.
               """,
     version=1.0,
@@ -44,7 +45,7 @@ def get_response_openai(prompt):
             frequency_penalty=0,
             presence_penalty=0,
             messages=[
-                {"role": "system", "content": "You are an expert creative marketer. Create a campaign for the brand the user enters."},
+                {"role": "system", "content": "You are an expert in insurance doamin. Answer the question the user enters."},
                 {"role": "user", "content": prompt},
             ],
             stream=True,
@@ -62,13 +63,10 @@ def get_response_openai(prompt):
 
 
 @app.get(
-    "/campaign/",
+    "/chat/",
     tags=["APIs"],
     response_model=str,
     responses={503: {"detail": error503}},
 )
-def campaign(prompt: str = Query(..., max_length=20)):
-    """
-    Create a marketing campaign plan for the brand name entered in the prompt
-    """
+def chat(prompt: str = Query(..., max_length=100)):
     return StreamingResponse(get_response_openai(prompt), media_type="text/event-stream")
