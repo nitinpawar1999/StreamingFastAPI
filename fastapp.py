@@ -7,7 +7,7 @@ import time
 import asyncio
 
 # Getting OpenAI API Key
-#OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_API_KEY = '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'
 if not len(OPENAI_API_KEY):
     print("Please set OPENAI_API_KEY environment variable. Exiting.")
@@ -74,7 +74,6 @@ def chat(prompt: str = Query(..., max_length=100)):
     return StreamingResponse(get_response_openai(prompt), media_type="text/event-stream")
 
 
-
 def get_text_stream(text_file_path):
     with open(text_file_path, "r") as file:
         for line in file:
@@ -86,3 +85,22 @@ def get_text_stream(text_file_path):
 @app.get("/txtstream/")
 async def txtstream():
     return StreamingResponse(get_text_stream('sample_file.txt'), media_type="text/event-stream")
+
+outputData = [{'question':'what is insurance?',
+               'answer':'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}]
+
+
+def get_prompt_answer(prompt):
+    for entry in outputData:
+        if entry['question'] == prompt:
+            for word in entry['answer'].split():
+                yield f"{word} "
+                time.sleep(0.1)
+
+
+@app.get("/prompt_answer/",
+         tags=["APIs"],
+         response_model=str)
+async def prompt_answer(prompt: str = Query(..., max_length=100)):
+    print(prompt)
+    return StreamingResponse(get_prompt_answer(prompt), media_type="text/event-stream")
